@@ -399,21 +399,34 @@ export class OrbitControls extends EventDispatcher {
       this.pan(this.panDelta.x, this.panDelta.y);
       this.panStart.copy(this.panEnd);
     };
+    // hta n optimisiha man ba3d
     this.handleTouchMoveDolly = ({ touches }, gestureState) => {
       if (touches.length == 2) {
         if (!Array.isArray(touches)) touches = [];
-        if (!touches[0]) {
-          touches[0] = { pageX: page1.x, pageY: page1.y };
-          touches[1] = { pageX: page0.x, pageY: page0.y };
-        }
         if (touches[0]) page0 = { x: touches[0].pageX, y: touches[0].pageY };
         if (touches[1]) {
           page1 = { x: touches[1].pageX, y: touches[1].pageY };
         }
+        const dx = touches[0].pageX - touches[1].pageX;
+        const dy = touches[0].pageY - touches[1].pageY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        this.dollyEnd.set(0, distance);
+        this.dollyDelta.set(
+          0,
+          this.dollyEnd.y / this.dollyStart.y ** this.zoomSpeed
+        );
+        this.dollyIn(this.dollyDelta.y);
+        this.dollyStart.copy(this.dollyEnd);
+      } else {
+        if (!Array.isArray(touches)) touches = [];
         if (!touches[1]) {
+          touches[0] = {
+            pageX: page0.x,
+            pageY: page0.y,
+          };
           touches[1] = {
-            pageX: page0.x || 0,
-            pageY: page0.y || 0,
+            pageX: page1.x || 0,
+            pageY: page1.y || 0,
           };
         }
         const dx = touches[0].pageX - touches[1].pageX;
@@ -608,11 +621,13 @@ export class OrbitControls extends EventDispatcher {
         case 2:
           switch (this.touches.TWO) {
             case TOUCH.DOLLY_PAN:
+              // console.log("yeah");
               if (this.enableZoom === false && this.enablePan === false) return;
               this.handleTouchStartDollyPan(event);
               this.state = STATE.TOUCH_DOLLY_PAN;
               break;
             case TOUCH.DOLLY_ROTATE:
+              // console.log("momkin dokhli ?");
               if (this.enableZoom === false && this.enableRotate === false)
                 return;
               this.handleTouchStartDollyRotate(event);

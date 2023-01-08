@@ -15,6 +15,9 @@ import {
   GridHelper,
   Fog,
   DirectionalLight,
+  MeshStandardMaterial,
+  CylinderGeometry,
+  Vector3,
 } from "three";
 import { parsePdbFunction } from "../Utils/data";
 import { useMyContext } from "./Context";
@@ -58,8 +61,6 @@ export default function RenderProtein({ route }) {
     const renderer = new Renderer({ gl });
     renderer.setSize(gl.drawingBufferWidth, gl.drawingBufferHeight);
 
-    const ambientLight = new AmbientLight(0x404040);
-    scene.add(ambientLight);
     // const pointLight = new PointLight(0xffffff, 2, 1000, 1);
     // pointLight.position.set(0, 200, 200);
     // scene.add(pointLight);
@@ -77,16 +78,37 @@ export default function RenderProtein({ route }) {
     const createElement = (element) => {
       const color = data[element.element];
       const geometry = new SphereGeometry(0.5);
-      const material = new MeshBasicMaterial({
+      const material = new MeshStandardMaterial({
         color: "#" + color[cpkColoring],
       });
       const sphere = new Mesh(geometry, material);
       sphere.position.set(element.x, element.y, element.z);
       scene.add(sphere);
     };
-    parse.map((element) => {
+    const coordonate = [];
+    parse.map((element, key) => {
       createElement(element);
     });
+
+    const CreateChemicalBond = (startPoint, endPoint) => {
+      var cylLength = new Vector3().subVectors(endPoint, startPoint).length(); // find the length of a cylinder
+      console.log(cylLength);
+      const geometry = new CylinderGeometry(0.2, 0.2, cylLength);
+      geometry.translate(0, cylLength / 2, 0);
+      geometry.rotateX(Math.PI / 2);
+      const material = new MeshStandardMaterial({
+        color: 0xff0000,
+      });
+      const cylinder = new Mesh(geometry, material);
+      cylinder.position.set(startPoint.x, startPoint.y, startPoint.z);
+      cylinder.lookAt(endPoint);
+      scene.add(cylinder);
+    };
+
+    const ambientLight = new AmbientLight(0x404040, 0.5);
+    scene.add(ambientLight);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    scene.add(directionalLight);
 
     const render = () => {
       requestAnimationFrame(render);
