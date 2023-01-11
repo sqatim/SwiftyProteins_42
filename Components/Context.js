@@ -8,15 +8,24 @@ export const useMyContext = () => {
 const AppContext = createContext(null);
 
 export const CPK_Coloring = {
-  JMOL: "jmol",
-  RASMOL: "rasmol",
+  JMOL: "Jmol",
+  RASMOL: "Rasmol",
 };
 
 export default function Context({ children }) {
-  const [cpkColoring, setcpkColoring] = useState("jmol");
+  const [activeColor, setActiveColor] = useState("Rasmol");
+  const [activeModelisation, setActiveModelisation] = useState("Sphere");
   const [data, setData] = useState(cpkData);
   return (
-    <AppContext.Provider value={{ cpkColoring, setcpkColoring, data }}>
+    <AppContext.Provider
+      value={{
+        activeColor,
+        activeModelisation,
+        setActiveColor,
+        setActiveModelisation,
+        data,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );

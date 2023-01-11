@@ -18,38 +18,52 @@ import {
   MeshStandardMaterial,
   CylinderGeometry,
   Vector3,
+  BoxGeometry,
 } from "three";
 import { parsePdbFunction } from "../Utils/data";
 import { useMyContext } from "./Context";
+import Options from "./Options";
 import OrbitControlsView from "./OrbitControlsView";
+import Switch from "./Switch";
 
 export default function RenderProtein({ route }) {
   const { ligand } = route.params;
   const [loader, setLoader] = useState(true);
-  const [parse, setParse] = useState([]);
-  const { cpkColoring, data } = useMyContext();
+  const [rerenderState, setRerenderState] = useState("false");
+  // atoms, serials, connectData
+  const [parse, setParse] = useState({});
+  const {
+    data,
+    activeColor,
+    setActiveColor,
+    activeModelisation,
+    setActiveModelisation,
+  } = useMyContext();
   const [cameraState, setCameraState] = useState(null);
 
   useEffect(() => {
     parsePdbFunction(ligand).then((value) => {
-      // console.log(value.atoms);
-      setParse(value.atoms);
+      setParse(value);
       setLoader(false);
     });
   }, []);
-  // const camera = new PerspectiveCamera(75, 1080 / 1984, 0.1, 1000);
+
+  useEffect(() => {
+    setRerenderState((prev) => (prev === "true" ? "false" : "true"));
+  }, [activeColor, activeModelisation]);
+
+  const scene = new Scene();
+  const camera = new PerspectiveCamera(65);
   const onContextCreate = (gl) => {
+    console.log("rerenderd");
     const scene = new Scene();
-    // scene.fog = new Fog("#3A96C4", 1, 10000);
-    // scene.add(new GridHelper(10, 10));
     const camera = new PerspectiveCamera(
       75,
       gl.drawingBufferWidth / gl.drawingBufferHeight,
       0.1,
       1000
     );
-    console.log(gl.drawingBufferWidth);
-    console.log(gl.drawingBufferHeight);
+    console.log(gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.canvas = {
       width: gl.drawingBufferWidth,
       height: gl.drawingBufferHeight,
@@ -61,49 +75,50 @@ export default function RenderProtein({ route }) {
     const renderer = new Renderer({ gl });
     renderer.setSize(gl.drawingBufferWidth, gl.drawingBufferHeight);
 
-    // const pointLight = new PointLight(0xffffff, 2, 1000, 1);
-    // pointLight.position.set(0, 200, 200);
-    // scene.add(pointLight);
-
-    // const light = new DirectionalLight(0xffffff, 0.5);
-    // light.position.set(3, 3, 3);
-    // scene.add(light);
-    // const spotLight = new SpotLight(0xffffff, 0.5);
-    // spotLight.position.set(0, 0, 0);
-    // spotLight.lookAt(0, 0, 0);
-    // scene.add(spotLight);
-
-    // const geometry = new BoxGeometry(1, 1, 1);
-
     const createElement = (element) => {
       const color = data[element.element];
-      const geometry = new SphereGeometry(0.5);
+      let geometry;
+      if (activeModelisation == "Cube")
+        geometry = new BoxGeometry(0.6, 0.6, 0.6);
+      else geometry = new SphereGeometry(0.5);
       const material = new MeshStandardMaterial({
-        color: "#" + color[cpkColoring],
+        color: "#" + color[activeColor],
       });
-      const sphere = new Mesh(geometry, material);
-      sphere.position.set(element.x, element.y, element.z);
-      scene.add(sphere);
+      const item = new Mesh(geometry, material);
+      item.position.set(element.x, element.y, element.z);
+      scene.add(item);
     };
     const coordonate = [];
-    parse.map((element, key) => {
+    parse.atoms.map((element, key) => {
       createElement(element);
     });
 
     const CreateChemicalBond = (startPoint, endPoint) => {
       var cylLength = new Vector3().subVectors(endPoint, startPoint).length(); // find the length of a cylinder
-      console.log(cylLength);
       const geometry = new CylinderGeometry(0.2, 0.2, cylLength);
       geometry.translate(0, cylLength / 2, 0);
       geometry.rotateX(Math.PI / 2);
       const material = new MeshStandardMaterial({
-        color: 0xff0000,
+        color: 0xffffff,
       });
       const cylinder = new Mesh(geometry, material);
       cylinder.position.set(startPoint.x, startPoint.y, startPoint.z);
       cylinder.lookAt(endPoint);
       scene.add(cylinder);
     };
+
+    parse.connectData.forEach((element, key) => {
+      let startPoint;
+      let endPoint;
+      element.forEach((item, id, arr) => {
+        const { x, y, z } = parse.serials[item];
+        if (id == 0) startPoint = new Vector3(x, y, z);
+        else {
+          endPoint = new Vector3(x, y, z);
+          CreateChemicalBond(startPoint, endPoint);
+        }
+      });
+    });
 
     const ambientLight = new AmbientLight(0x404040, 0.5);
     scene.add(ambientLight);
@@ -117,12 +132,22 @@ export default function RenderProtein({ route }) {
     };
     render();
   };
+
   return (
     <RenderProteinStyle>
       {!loader && (
-        <OrbitControlsView style={{ flex: 1 }} camera={cameraState}>
-          <GLView onContextCreate={onContextCreate} style={{ flex: 1 }} />
-        </OrbitControlsView>
+        <>
+          <Options />
+          {/* {activeColor && ( */}
+          <OrbitControlsView style={{ flex: 1 }} camera={cameraState}>
+            <GLView
+              key={rerenderState}
+              onContextCreate={onContextCreate}
+              style={{ flex: 1 }}
+            />
+          </OrbitControlsView>
+          {/* )} */}
+        </>
       )}
       {/* <TextStyle>{ligand}</TextStyle> */}
     </RenderProteinStyle>
