@@ -21,6 +21,9 @@ export const parsePdbFunction = async (ligand) => {
     serials[element.serial] = { x: element.x, y: element.y, z: element.z };
   });
 
+  // parsed.atoms.map((element) => {
+  //   console.log(element);
+  // });
   result = { atoms: parsed.atoms, serials, connectData };
   return result;
 };
