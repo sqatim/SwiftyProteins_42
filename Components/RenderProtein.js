@@ -19,10 +19,10 @@ import Options from "./Options";
 import OrbitControlsView from "./OrbitControlsView";
 import Popup from "./Popup";
 import ViewShot from "react-native-view-shot";
-// import Share from "react-native-share";
 
 import { TouchableOpacity, Text } from "react-native";
 import Share from "react-native-share";
+import RNFS from "react-native-fs";
 
 export default function RenderProtein({ route }) {
   const { ligand } = route.params;
@@ -85,14 +85,13 @@ export default function RenderProtein({ route }) {
     // camera.position.y = 50;
     const renderer = new Renderer({ gl });
     renderer.setSize(gl.drawingBufferWidth, gl.drawingBufferHeight);
-    // renderer.setClearColor("#fff");
+    renderer.setClearColor("#fff");
 
     const createElement = (element) => {
       let atom = element.element;
       if (atom[1]) atom = atom[0] + atom[1].toLowerCase();
 
       const color = data[atom];
-      // console.log("color:", color);
       let geometry;
       if (activeModelisation == "Cube")
         geometry = new BoxGeometry(0.6, 0.6, 0.6);
@@ -162,10 +161,22 @@ export default function RenderProtein({ route }) {
     // console.log(shotRef);
     try {
       await shotRef.current.capture().then(async (uri) => {
-        console.log(uri);
-        Share.open({ message: "hi", title: "diana" }).then((res) =>
-          console.log(res)
-        );
+        RNFS.readFile(uri, 'base64').then((res) => {
+          let urlString = 'data:image/jpeg;base64,' + res;
+          let options = {
+            title: 'Share Title',
+            message: 'Share Message',
+            url: urlString,
+            type: 'image/jpeg',
+          };
+          Share.open(options)
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              err && console.log(err);
+            });
+        });
       });
     } catch (error) {
       console.log("error:", error);
@@ -181,7 +192,7 @@ export default function RenderProtein({ route }) {
           </TouchableOpacity>
           {/* {activeColor && ( */}
           <OrbitControlsView
-            // key={rerenderState}
+            key={rerenderState}
             onLayout={(event) => {
               var { x, y, width, height } = event.nativeEvent.layout;
               setWidthHeight({
@@ -200,8 +211,7 @@ export default function RenderProtein({ route }) {
               ref={shotRef}
               options={{ format: "jpg", quality: 0.9 }}
               style={{
-                width: widthHeight.width,
-                height: widthHeight.height,
+                flex: 1,
               }}
             >
               <GLView
