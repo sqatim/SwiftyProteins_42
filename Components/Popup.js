@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 
 export default function Popup({ visible, setVisible, atomData }) {
   useEffect(() => {
-    console.log("atomData:", atomData);
+    // console.log("atomData:", atomData);
   }, [atomData]);
 
   const closePopup = () => {
@@ -17,7 +17,7 @@ export default function Popup({ visible, setVisible, atomData }) {
       visible={visible}
       transparent={true}
       onRequestClose={() => {
-        console.log("toto");
+        // console.log("toto");
       }}
     >
       <ModalStyle>

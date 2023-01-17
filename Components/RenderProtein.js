@@ -18,37 +18,37 @@ import { useMyContext } from "./Context";
 import Options from "./Options";
 import OrbitControlsView from "./OrbitControlsView";
 import Popup from "./Popup";
+
 import ViewShot from "react-native-view-shot";
+import Header from "./Header";
 
-import { TouchableOpacity, Text } from "react-native";
-import Share from "react-native-share";
-import RNFS from "react-native-fs";
-
-export default function RenderProtein({ route }) {
+export default function RenderProtein({ route, navigation }) {
   const { ligand } = route.params;
-  const [loader, setLoader] = useState(true);
+  const [loader, setLoader] = useState(false);
   const [rerenderState, setRerenderState] = useState("false");
   const [objects, setObjects] = useState([]);
   const [visible, setVisible] = useState(false);
   const [atomData, setAtomData] = useState({});
   // atoms, serials, connectData
-  const [parse, setParse] = useState({});
-  const { data, activeColor, activeModelisation, orientation } = useMyContext();
+  const {
+    data,
+    activeColor,
+    activeModelisation,
+    orientation,
+    light,
+    shotRef,
+    parse,
+  } = useMyContext();
   const [widthHeight, setWidthHeight] = useState({});
   const scene = useRef();
   const camera = useRef();
-  const shotRef = useRef();
 
   useEffect(() => {
-    parsePdbFunction(ligand).then((value) => {
-      setParse(value);
-      setLoader(false);
-    });
+    // console.log("parse:", parse);
   }, []);
-
   useEffect(() => {
     setRerenderState((prev) => (prev === "true" ? "false" : "true"));
-  }, [activeColor, activeModelisation, orientation]);
+  }, [activeColor, activeModelisation, orientation, light]);
 
   const intersect = ({ nativeEvent }) => {
     const { locationX: x, locationY: y } = nativeEvent;
@@ -85,7 +85,7 @@ export default function RenderProtein({ route }) {
     // camera.position.y = 50;
     const renderer = new Renderer({ gl });
     renderer.setSize(gl.drawingBufferWidth, gl.drawingBufferHeight);
-    renderer.setClearColor("#fff");
+    renderer.setClearColor(light ? "#fff" : "#171223");
 
     const createElement = (element) => {
       let atom = element.element;
@@ -158,39 +158,40 @@ export default function RenderProtein({ route }) {
     render();
   };
   const share = async () => {
-    // console.log(shotRef);
-    try {
-      await shotRef.current.capture().then(async (uri) => {
-        RNFS.readFile(uri, 'base64').then((res) => {
-          let urlString = 'data:image/jpeg;base64,' + res;
-          let options = {
-            title: 'Share Title',
-            message: 'Share Message',
-            url: urlString,
-            type: 'image/jpeg',
-          };
-          Share.open(options)
-            .then((res) => {
-              console.log(res);
-            })
-            .catch((err) => {
-              err && console.log(err);
-            });
-        });
-      });
-    } catch (error) {
-      console.log("error:", error);
-    }
+    // console.log("Share");
+    // try {
+    //   await shotRef.current.capture().then(async (uri) => {
+    //     RNFS.readFile(uri, 'base64').then((res) => {
+    //       let urlString = 'data:image/jpeg;base64,' + res;
+    //       let options = {
+    //         title: 'Share Title',
+    //         message: 'Share Message',
+    //         url: urlString,
+    //         type: 'image/jpeg',
+    //       };
+    //       Share.open(options)
+    //         .then((res) => {
+    //           console.log(res);
+    //         })
+    //         .catch((err) => {
+    //           err && console.log(err);
+    //         });
+    //     });
+    //   });
+    // } catch (error) {
+    //   console.log("error:", error);
+    // }
   };
   return (
     <RenderProteinStyle>
       {!loader && (
         <>
+          <Header
+            route={route.name}
+            navigate={navigation.navigate}
+            ligand={ligand}
+          />
           <Options />
-          <TouchableOpacity onPress={share}>
-            <Text>salam</Text>
-          </TouchableOpacity>
-          {/* {activeColor && ( */}
           <OrbitControlsView
             key={rerenderState}
             onLayout={(event) => {
@@ -237,6 +238,7 @@ export default function RenderProtein({ route }) {
 
 const RenderProteinStyle = styled.View`
   flex: 1;
+  background-color: ${({ theme }) => theme.background};
 `;
 
 const TextStyle = styled.Text``;

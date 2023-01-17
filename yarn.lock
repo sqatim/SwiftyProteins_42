@@ -5685,6 +5685,11 @@ react-native-gradle-plugin@^0.70.3:
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.70.3.tgz#cbcf0619cbfbddaa9128701aa2d7b4145f9c4fc8"
   integrity sha512-oOanj84fJEXUg9FoEAQomA8ISG+DVIrTZ3qF7m69VQUJyOGYyDZmPqKcjvRku4KXlEH6hWO9i4ACLzNBh8gC0A==
 
+react-native-orientation-loading-overlay@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/react-native-orientation-loading-overlay/-/react-native-orientation-loading-overlay-0.1.6.tgz#fe8900828c28aa786c822dadf6fe55401f59da8e"
+  integrity sha512-SbsBFnZIejF/zZy3nL2vmmZkUovQ9ed28b6p2x8ZhAYoseHyO3dS0iahhPu1eSneGE2+XVw+zoKHmxOmVFmKXw==
+
 react-native-safe-area-context@4.4.1:
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-4.4.1.tgz#239c60b8a9a80eac70a38a822b04c0f1d15ffc01"

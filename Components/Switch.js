@@ -3,13 +3,11 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 
 export default function Switch({
-  navigation,
   selectionMode,
   roundCorner,
   options,
   activeOption,
-  onSelectSwitch,
-  selectionColor,
+  marginBottom,
   switchOption,
 }) {
   const [getSelectionMode, setSelectionMode] = useState(selectionMode);
@@ -24,7 +22,7 @@ export default function Switch({
     // console.log("active Option:", activeOption);
   }, [activeOption]);
   return (
-    <SwitchContainerStyle>
+    <SwitchContainerStyle marginBottom={marginBottom}>
       {activeOption &&
         options.map((element, key) => (
           <ToucheButtonStyle
@@ -43,7 +41,7 @@ export default function Switch({
 
 const SwitchContainerStyle = styled.View`
   flex-direction: row;
-  background-color: white;
+  background-color: ${({ theme }) => theme.background};
   /* background-color: red; */
   width: 215px;
   height: 44px;
@@ -52,20 +50,23 @@ const SwitchContainerStyle = styled.View`
   border-radius: 25px;
   padding: 3px;
   overflow: hidden;
+  border: 1px;
+  border-color: ${({ theme }) => theme.borderColorItems};
+  margin-bottom: ${({ marginBottom }) => marginBottom || "0px"};
+  margin-top: ${({ marginBottom }) => marginBottom || "0px"};
 `;
 
 const ToucheButtonStyle = styled.TouchableOpacity`
-  background-color: ${({ active }) => (active ? "#0fa6f2" : "white")};
+  background-color: ${({ active, theme }) =>
+    active ? "#0fa6f2" : theme.background};
   border-radius: ${({ active }) => (active ? "25px" : "0px")};
-  /* background-color: blue; */
   flex: 1;
   height: 100%;
-  /* border-radius: 25px; */
   justify-content: center;
   align-items: center;
 `;
 
 const ToucheButtonTextStyle = styled.Text`
-  color: ${({ active }) => (active ? "white" : "#0b65c2")};
+  color: ${({ active, theme }) => (active ? "white" : theme.color)};
   font-weight: ${({ active }) => (active ? "bold" : "normal")};
 `;

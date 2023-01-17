@@ -24,6 +24,7 @@ export default function Options() {
         options={["Jmol", "Rasmol"]}
         activeOption={activeColor}
         switchOption={switchColor}
+        marginBottom={"5px"}
       />
       <Switch
         options={["Sphere", "Cube"]}
@@ -34,4 +35,6 @@ export default function Options() {
   );
 }
 
-const OptionsCOntainer = styled.View``;
+const OptionsCOntainer = styled.View`
+  align-items: center;
+`;

@@ -1,6 +1,6 @@
 // import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { StyleSheet, Text, View, StatusBar } from "react-native";
+import { StyleSheet, Text, View, StatusBar, SafeAreaView } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import styled from "styled-components/native";
 import Context from "./Components/Context";
@@ -12,14 +12,14 @@ export default function App() {
     console.log("StatusBar.currentHeight:", StatusBar.currentHeight);
   }, []);
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <StatusBar backgroundColor="#61dafb" hidden={false} />
       <Context>
         <ContentStyle>
           <Routes />
         </ContentStyle>
       </Context>
-    </GestureHandlerRootView>
+    </SafeAreaView>
   );
 }
 
@@ -30,4 +30,5 @@ export default function App() {
 const ContentStyle = styled.View`
   flex: 1;
   width: 100%;
+  background-color: #fff;
 `;

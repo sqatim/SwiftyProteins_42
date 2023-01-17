@@ -3,12 +3,21 @@ import styled from "styled-components/native";
 import ligands from "../Utils/ligands.json";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, TextInput } from "react-native";
+import Header from "./Header";
+import OrientationLoadingOverlay from "react-native-orientation-loading-overlay";
+import { useMyContext } from "./Context";
+import { parsePdbFunction } from "../Utils/data";
 
-const RenderItem = ({ item, navigation }) => {
+const RenderItem = ({ item, navigation, setLoader, setParse }) => {
   return (
     <LigandItem
       onPress={() => {
-        navigation.navigate("RenderProtein", { ligand: item });
+        setLoader(true);
+        parsePdbFunction(item).then((value) => {
+          setParse(value)
+          navigation.navigate("RenderProtein", { ligand: item });
+          setLoader(false);
+        });
       }}
     >
       <LigandItemText>{item}</LigandItemText>
@@ -16,13 +25,15 @@ const RenderItem = ({ item, navigation }) => {
   );
 };
 
-export default function LigandsList({ navigation }) {
+export default function LigandsList({ navigation, route }) {
   const [ligandsData, setLigandsData] = useState(ligands);
   const [search, setSearch] = useState("");
+  const { setParse } = useMyContext();
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     // console.log("navigation:", navigation);
-    console.log(search);
+    // console.log(route);
     if (search == "") setLigandsData(ligands);
     else {
       const tmpArray = ligands.filter((element) => element.includes(search));
@@ -32,22 +43,38 @@ export default function LigandsList({ navigation }) {
   return (
     <LigandsListStyle
       ListHeaderComponent={
-        // <>
-        <SearchComponent>
-          <SearchContainerStyle>
-            <ImageStyle source={require("../assets/search.png")}></ImageStyle>
-            <SearchInputStyle
-              value={search}
-              onChangeText={setSearch}
-              placeholder="search"
-            />
-          </SearchContainerStyle>
-        </SearchComponent>
-        // </>
+        <>
+          <Header route={route.name} navigate={navigation.navigate} />
+          <SearchComponent>
+            <SearchContainerStyle>
+              <ImageStyle
+                source={require("../assets/search1.png")}
+              ></ImageStyle>
+              <SearchInputStyle
+                value={search}
+                onChangeText={setSearch}
+                placeholder="search"
+                placeholderTextColor="#c2daf2"
+              />
+            </SearchContainerStyle>
+          </SearchComponent>
+          <OrientationLoadingOverlay
+            visible={loader}
+            color="white"
+            indicatorSize="large"
+            messageFontSize={24}
+            message="Loading..."
+          />
+        </>
       }
       data={ligandsData}
       renderItem={({ item }) => (
-        <RenderItem item={item} navigation={navigation} />
+        <RenderItem
+          item={item}
+          navigation={navigation}
+          setParse={setParse}
+          setLoader={setLoader}
+        />
       )}
       stickyHeaderIndices={[0]}
     />
@@ -56,7 +83,7 @@ export default function LigandsList({ navigation }) {
 
 const LigandsListStyle = styled.FlatList`
   flex: 1;
-  /* background-color: gray; */
+  background-color: ${({ theme }) => theme.background};
 `;
 
 const LigandItem = styled.TouchableOpacity`
@@ -68,15 +95,15 @@ const LigandItem = styled.TouchableOpacity`
   justify-content: center;
   border-width: 1px;
   border-radius: 15px;
-  border-color: #0b65c2;
+  border-color: ${({ theme }) => theme.borderColorItems};
+  background-color: ${({ theme }) => theme.background};
 `;
 
 const LigandItemText = styled.Text`
   width: 100%;
   margin-left: 10px;
-  color: #0b65c2;
+  color: ${({ theme }) => theme.color};
   text-align: center;
-  /* background-color: #fff; */
   /* color: white; */
 `;
 
@@ -84,7 +111,9 @@ const SearchComponent = styled.View`
   height: 50px;
   align-items: center;
   justify-content: center;
-  /* background-color: red; */
+  width: 100%;
+  background-color: ${({ theme }) => theme.background};
+  /* background-color: yellow; */
   /* position: sticky; */
 `;
 
@@ -92,17 +121,28 @@ const SearchContainerStyle = styled.View`
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  /* background-color: yellow; */
+  background-color: ${({ theme }) => theme.background};
   height: 40px;
-  border-bottom-width: 1px;
-  border-bottom-color: #f3f3f3;
+  /* border-bottom-width: 1px; */
+  /* border-bottom-color: #f3f3f3; */
+  width: 85%;
+  border-radius: 15px;
+  border: 1px;
+  border-color: ${({ theme }) => theme.borderColorItems};
+  /* background-color: red; */
 `;
 
 const SearchInputStyle = styled.TextInput`
   /* border-width: 1px; */
   /* flex: 1; */
-  width: 70%;
+  /* background-color: #fff; */
+  background-color: ${({ theme }) => theme.background};
+
+  /* background-color: red; */
+  height: 100%;
+  width: 80%;
   padding-left: 10px;
+  color: ${({ theme }) => theme.color};
 `;
 
 const ImageStyle = styled.Image`

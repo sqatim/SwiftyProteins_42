@@ -1,0 +1,26 @@
+export const theme = {
+  lightTheme: {
+    headerBackground: "#fff",
+    background: "#fff",
+    color: "#0b65c2",
+    borderColorItems: "#0b65c2",
+    inputBackground: "#fff",
+    inputColor: "#000",
+    buttonBackground: "#fff",
+    buttonColor: "#000",
+    levelBackground: "#252c2a",
+    levelColor: "#fff",
+  },
+  darkTheme: {
+    headerBackground: "#171223",
+    background: "#171223",
+    color: "#fff",
+    borderColorItems: "#fff",
+    inputBackground: "#fff",
+    inputColor: "#000",
+    buttonBackground: "#fff",
+    buttonColor: "#000",
+    levelBackground: "#fff",
+    levelColor: "#000",
+  },
+};
