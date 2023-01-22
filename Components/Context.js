@@ -29,7 +29,6 @@ export default function Context({ children, ...props }) {
   const shotRef = useRef();
 
   useEffect(() => {
-    console.log(props);
     Dimensions.addEventListener("change", ({ window: { width, height } }) => {
       if (width < height) {
         setOrientation("Portrait");

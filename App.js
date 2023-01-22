@@ -25,7 +25,6 @@ export default function App() {
           result = JSON.parse(result);
           setLight(result.light);
         } else setLight(true);
-        console.log(result);
       } catch (e) {
         console.warn(e);
       }

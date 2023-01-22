@@ -17,7 +17,7 @@ export default function Routes() {
     <ThemeProvider theme={light ? theme.lightTheme : theme.darkTheme}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {/* <Stack.Screen name="Home" component={Home} /> */}
+          <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Ligands" component={LigandsList} />
           <Stack.Screen name="RenderProtein" component={RenderProtein} />
         </Stack.Navigator>
