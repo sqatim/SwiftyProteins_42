@@ -19,16 +19,17 @@ export const CPK_Coloring = {
   RASMOL: "Rasmol",
 };
 
-export default function Context({ children }) {
+export default function Context({ children, ...props }) {
   const [activeColor, setActiveColor] = useState("Rasmol");
   const [activeModelisation, setActiveModelisation] = useState("Sphere");
   const [data, setData] = useState(cpkData);
   const [parse, setParse] = useState({});
   const [orientation, setOrientation] = useState("");
-  const [light, setLight] = useState(true);
+  const { light, setLight } = props;
   const shotRef = useRef();
 
   useEffect(() => {
+    console.log(props);
     Dimensions.addEventListener("change", ({ window: { width, height } }) => {
       if (width < height) {
         setOrientation("Portrait");

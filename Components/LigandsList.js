@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { PureComponent, useEffect, useState } from "react";
 import styled from "styled-components/native";
 import ligands from "../Utils/ligands.json";
 import { StatusBar } from "expo-status-bar";
@@ -8,22 +8,25 @@ import OrientationLoadingOverlay from "react-native-orientation-loading-overlay"
 import { useMyContext } from "./Context";
 import { parsePdbFunction } from "../Utils/data";
 
-const RenderItem = ({ item, navigation, setLoader, setParse }) => {
-  return (
-    <LigandItem
-      onPress={() => {
-        setLoader(true);
-        parsePdbFunction(item).then((value) => {
-          setParse(value)
-          navigation.navigate("RenderProtein", { ligand: item });
-          setLoader(false);
-        });
-      }}
-    >
-      <LigandItemText>{item}</LigandItemText>
-    </LigandItem>
-  );
-};
+class RenderItem extends PureComponent {
+  render() {
+    const { item, navigation, setLoader, setParse } = this.props;
+    return (
+      <LigandItem
+        onPress={() => {
+          setLoader(true);
+          parsePdbFunction(item).then((value) => {
+            setParse(value);
+            navigation.navigate("RenderProtein", { ligand: item });
+            setLoader(false);
+          });
+        }}
+      >
+        <LigandItemText>{item}</LigandItemText>
+      </LigandItem>
+    );
+  }
+}
 
 export default function LigandsList({ navigation, route }) {
   const [ligandsData, setLigandsData] = useState(ligands);
@@ -36,7 +39,9 @@ export default function LigandsList({ navigation, route }) {
     // console.log(route);
     if (search == "") setLigandsData(ligands);
     else {
-      const tmpArray = ligands.filter((element) => element.includes(search));
+      const tmpArray = ligands.filter((element) =>
+        element.includes(search.toUpperCase())
+      );
       setLigandsData(tmpArray);
     }
   }, [search]);

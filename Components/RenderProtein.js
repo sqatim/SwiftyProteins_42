@@ -12,6 +12,7 @@ import {
   CylinderGeometry,
   Vector3,
   BoxGeometry,
+  MeshMatcapMaterial,
 } from "three";
 import { parsePdbFunction } from "../Utils/data";
 import { useMyContext } from "./Context";
@@ -96,7 +97,7 @@ export default function RenderProtein({ route, navigation }) {
       if (activeModelisation == "Cube")
         geometry = new BoxGeometry(0.6, 0.6, 0.6);
       else geometry = new SphereGeometry(0.5);
-      const material = new MeshStandardMaterial({
+      const material = new MeshMatcapMaterial({
         color: "#" + color[activeColor],
       });
       const item = new Mesh(geometry, material);
@@ -121,7 +122,7 @@ export default function RenderProtein({ route, navigation }) {
       const geometry = new CylinderGeometry(0.2, 0.2, cylLength);
       geometry.translate(0, cylLength / 2, 0);
       geometry.rotateX(Math.PI / 2);
-      const material = new MeshStandardMaterial({
+      const material = new MeshMatcapMaterial({
         color: 0xffffff,
       });
       const cylinder = new Mesh(geometry, material);

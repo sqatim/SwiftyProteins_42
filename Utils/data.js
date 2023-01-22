@@ -9,12 +9,13 @@ export const parsePdbFunction = async (ligand) => {
   const { data } = await axios.get(
     `https://files.rcsb.org/ligands/view/${ligand}_ideal.pdb`
   );
+
   const parsed = parsePdb(data);
   connectParsed = data.split("\n");
   connectParsed = connectParsed.filter((element) => element.includes("CONECT"));
   connectParsed.map((element, key) => {
-    connectData[key] = element.split("   ").slice(1);
-    connectData[key] = connectData[key].map((element) => element.trim());
+    connectData[key] = element.split(" ").slice(1);
+    connectData[key] = connectData[key].filter(item => item != '')
   });
 
   parsed.atoms.forEach((element) => {
