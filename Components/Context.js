@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, AppState } from "react-native";
 import cpkData from "../Utils/CpkData.json";
 
 export const useMyContext = () => {
@@ -27,6 +27,7 @@ export default function Context({ children, ...props }) {
   const [orientation, setOrientation] = useState("");
   const { light, setLight } = props;
   const shotRef = useRef();
+  const appState = useRef(AppState.currentState);
 
   useEffect(() => {
     Dimensions.addEventListener("change", ({ window: { width, height } }) => {

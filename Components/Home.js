@@ -3,17 +3,14 @@ import { Text } from "react-native";
 import styled from "styled-components/native";
 import * as LocalAuthentication from "expo-local-authentication";
 import AuthenticatePopup from "./AuthenticatePopup";
+import { stateType } from "../Utils/data";
+import Header from "./Header";
 
-export const stateType = {
-  INITIAL: "initial",
-  FALSE: "false",
-  TRUE: "true",
-};
-
-export default function Home({ navigation }) {
+export default function Home({ navigation, route }) {
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState({ state: stateType.INITIAL, message: "" });
   const [loader, setLoader] = useState(true);
+
   useEffect(() => {
     const checkSensor = async () => {
       const result = await LocalAuthentication.isEnrolledAsync();
@@ -42,13 +39,16 @@ export default function Home({ navigation }) {
   if (loader) return null;
   return (
     <HomeStyle>
-      <ButtonViewStyle>
-        <AuthenticateButtonStyle onPress={authenticateFunction}>
-          <AuthenticateButtonTextStyle>
-            Authenticate
-          </AuthenticateButtonTextStyle>
-        </AuthenticateButtonStyle>
-      </ButtonViewStyle>
+      <Header route={route.name} navigate={navigation.navigate} />
+      <ContentStyle>
+        <ButtonViewStyle>
+          <AuthenticateButtonStyle onPress={authenticateFunction}>
+            <AuthenticateButtonTextStyle>
+              Authenticate
+            </AuthenticateButtonTextStyle>
+          </AuthenticateButtonStyle>
+        </ButtonViewStyle>
+      </ContentStyle>
       <AuthenticatePopup
         visible={visible}
         setVisible={setVisible}
@@ -62,8 +62,8 @@ export default function Home({ navigation }) {
 
 const HomeStyle = styled.View`
   flex: 1;
-  justify-content: center;
-  /* background-color: red; */
+  background-color: ${({ theme }) => theme.background};
+  /* justify-content: center; */
   align-items: center;
 `;
 
@@ -74,6 +74,9 @@ const ButtonViewStyle = styled.View`
   elevation: 20;
   border-radius: 15px;
   shadow-color: #000;
+  border: 1px;
+  border-color: ${({ theme }) => theme.borderColorItems};
+  background-color: ${({ theme }) => theme.background};
 `;
 const AuthenticateButtonStyle = styled.TouchableOpacity`
   width: 100%;
@@ -81,4 +84,12 @@ const AuthenticateButtonStyle = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
 `;
-const AuthenticateButtonTextStyle = styled.Text``;
+const AuthenticateButtonTextStyle = styled.Text`
+  color: ${({ theme }) => theme.color};
+`;
+
+const ContentStyle = styled.View`
+  flex: 1;
+  background-color: inherit;
+  justify-content: center;
+`;

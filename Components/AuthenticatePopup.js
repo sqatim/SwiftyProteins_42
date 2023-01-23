@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Image, Modal, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
-import { stateType } from "./Home";
+import { stateType } from "../Utils/data";
 
 export default function AuthenticatePopup({
   visible,
@@ -10,7 +10,14 @@ export default function AuthenticatePopup({
   setData,
   navigate,
 }) {
+  const icons = {
+    true: require("../assets/success.png"),
+    false: require("../assets/failed.png"),
+  };
+  //   const [icon, setIcon] = useState("");
+  const timeOutRef = useRef();
   const closePopup = () => {
+    clearTimeout(timeOutRef.current);
     if (data.state == stateType.TRUE) {
       navigate("Ligands");
     }
@@ -20,15 +27,14 @@ export default function AuthenticatePopup({
 
   useEffect(() => {
     if (data.state == stateType.TRUE) {
-      setTimeout(() => {
-        console.log("diana");
-        if (data.state == false) navigate("Ligands");
-        setData({ error: false, message: "" });
+      timeOutRef.current = setTimeout(() => {
+        navigate("Ligands");
+        setData({ state: stateType.INITIAL, message: "" });
         setVisible(false);
       }, 5000);
     }
   }, [data]);
-
+  if (data.state == stateType.INITIAL) return null;
   return (
     <Modal
       animationType="slide"
@@ -46,7 +52,7 @@ export default function AuthenticatePopup({
               style={{ height: 15, width: 15 }}
             />
           </CloseButtonStyle>
-          {/* <IconStyle/> */}
+          <IconStyle source={icons[data.state]} />
           <MessageStyle>{data.message}</MessageStyle>
         </ModalContentStyle>
       </ModalStyle>
@@ -74,11 +80,18 @@ const CloseButtonStyle = styled.TouchableOpacity`
   align-self: flex-end;
 `;
 
-const IconStyle = styled.Image``;
+const IconStyle = styled.Image`
+  width: 70px;
+  height: 70px;
+  align-self: center;
+  margin-bottom: 20px;
+`;
 
 const MessageStyle = styled.Text`
   font-weight: bold;
   text-align: center;
+  margin-bottom: 25px;
+  font-size: 20px;
 `;
 
 const ContentItemStyle = styled.View`

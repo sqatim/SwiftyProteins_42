@@ -15,7 +15,7 @@ export const parsePdbFunction = async (ligand) => {
   connectParsed = connectParsed.filter((element) => element.includes("CONECT"));
   connectParsed.map((element, key) => {
     connectData[key] = element.split(" ").slice(1);
-    connectData[key] = connectData[key].filter(item => item != '')
+    connectData[key] = connectData[key].filter((item) => item != "");
   });
 
   parsed.atoms.forEach((element) => {
@@ -27,4 +27,10 @@ export const parsePdbFunction = async (ligand) => {
   // });
   result = { atoms: parsed.atoms, serials, connectData };
   return result;
+};
+
+export const stateType = {
+  INITIAL: "initial",
+  FALSE: "false",
+  TRUE: "true",
 };

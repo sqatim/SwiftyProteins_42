@@ -14,8 +14,8 @@ export default function Header({ route, navigate, ligand }) {
     await SecureStore.setItemAsync("light", newMode);
     setLight((prev) => !prev);
   };
-  const navigateToHome = () => {
-    navigate("Ligands");
+  const navigateToHome = (route) => {
+    if (route != "Ligands" && route != "Home") navigate("Ligands");
   };
 
   const share = async () => {
@@ -47,7 +47,7 @@ export default function Header({ route, navigate, ligand }) {
   return (
     <HeaderStyle>
       <LeftSideHeaderStyle>
-        <TouchableOpacity onPress={navigateToHome}>
+        <TouchableOpacity onPress={() => navigateToHome(route)}>
           {light ? (
             <IconStyle source={require("../assets/blue.png")}></IconStyle>
           ) : (
@@ -95,6 +95,7 @@ const HeaderStyle = styled.View`
   border-bottom-width: 1px;
   border-bottom-color: #f3f3f3;
   background-color: ${({ theme }) => theme.headerBackground};
+  width: 100%;
 `;
 
 const LeftSideHeaderStyle = styled.View`

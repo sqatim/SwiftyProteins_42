@@ -2,11 +2,12 @@ import React, { PureComponent, useEffect, useState } from "react";
 import styled from "styled-components/native";
 import ligands from "../Utils/ligands.json";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, TextInput } from "react-native";
+import { AppState, StyleSheet, TextInput } from "react-native";
 import Header from "./Header";
 import OrientationLoadingOverlay from "react-native-orientation-loading-overlay";
 import { useMyContext } from "./Context";
 import { parsePdbFunction } from "../Utils/data";
+import { useIsFocused } from "@react-navigation/native";
 
 class RenderItem extends PureComponent {
   render() {
@@ -33,7 +34,20 @@ export default function LigandsList({ navigation, route }) {
   const [search, setSearch] = useState("");
   const { setParse } = useMyContext();
   const [loader, setLoader] = useState(false);
+  const isFocused = useIsFocused();
 
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (nextAppState.includes("background")) {
+        navigation.navigate("Home");
+        // console.log("App has come to the foreground!");
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
   useEffect(() => {
     // console.log("navigation:", navigation);
     // console.log(route);
@@ -45,6 +59,9 @@ export default function LigandsList({ navigation, route }) {
       setLigandsData(tmpArray);
     }
   }, [search]);
+  useEffect(() => {
+    console.log("isFocused:", isFocused);
+  }, [isFocused]);
   return (
     <LigandsListStyle
       ListHeaderComponent={

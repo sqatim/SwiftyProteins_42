@@ -22,6 +22,7 @@ import Popup from "./Popup";
 
 import ViewShot from "react-native-view-shot";
 import Header from "./Header";
+import { AppState } from "react-native";
 
 export default function RenderProtein({ route, navigation }) {
   const { ligand } = route.params;
@@ -45,7 +46,16 @@ export default function RenderProtein({ route, navigation }) {
   const camera = useRef();
 
   useEffect(() => {
-    // console.log("parse:", parse);
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (nextAppState.includes("background")) {
+        navigation.navigate("Home");
+        // console.log("App has come to the foreground!");
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
   }, []);
   useEffect(() => {
     setRerenderState((prev) => (prev === "true" ? "false" : "true"));

@@ -1,11 +1,9 @@
 // import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View, StatusBar, SafeAreaView } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { StatusBar, SafeAreaView } from "react-native";
 import styled from "styled-components/native";
 import Context from "./Components/Context";
 import SplashScreen from "./Components/SplashScreen";
-import LigandsList from "./Components/LigandsList";
 import Routes from "./Components/Routes";
 import * as SecureStore from "expo-secure-store";
 
