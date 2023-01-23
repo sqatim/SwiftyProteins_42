@@ -31,7 +31,7 @@ export default function RenderProtein({ route, navigation }) {
   const [objects, setObjects] = useState([]);
   const [visible, setVisible] = useState(false);
   const [atomData, setAtomData] = useState({});
-  // atoms, serials, connectData
+  const [start, setStart] = useState();
   const {
     data,
     activeColor,
@@ -160,39 +160,12 @@ export default function RenderProtein({ route, navigation }) {
     scene.current.add(directionalLight);
     const render = () => {
       requestAnimationFrame(render);
-      // camera.updateMatrixWorld();
-      // console.log(scene);
-      // setCameraState(camera);
       renderer.render(scene.current, camera.current);
       gl.endFrameEXP();
     };
     render();
   };
-  const share = async () => {
-    // console.log("Share");
-    // try {
-    //   await shotRef.current.capture().then(async (uri) => {
-    //     RNFS.readFile(uri, 'base64').then((res) => {
-    //       let urlString = 'data:image/jpeg;base64,' + res;
-    //       let options = {
-    //         title: 'Share Title',
-    //         message: 'Share Message',
-    //         url: urlString,
-    //         type: 'image/jpeg',
-    //       };
-    //       Share.open(options)
-    //         .then((res) => {
-    //           console.log(res);
-    //         })
-    //         .catch((err) => {
-    //           err && console.log(err);
-    //         });
-    //     });
-    //   });
-    // } catch (error) {
-    //   console.log("error:", error);
-    // }
-  };
+
   return (
     <RenderProteinStyle>
       {!loader && (
@@ -215,8 +188,13 @@ export default function RenderProtein({ route, navigation }) {
             }}
             style={{ flex: 1 }}
             camera={camera.current}
+            onTouchStart={(event) => {
+              const { locationX: x, locationY: y } = event.nativeEvent;
+              setStart({ x, y });
+            }}
             onTouchEndCapture={(event) => {
-              intersect(event);
+              const { locationX: x, locationY: y } = event.nativeEvent;
+              if (x == start.x && y == start.y) intersect(event);
             }}
           >
             <ViewShot

@@ -16,11 +16,17 @@ class RenderItem extends PureComponent {
       <LigandItem
         onPress={() => {
           setLoader(true);
-          parsePdbFunction(item).then((value) => {
-            setParse(value);
-            navigation.navigate("RenderProtein", { ligand: item });
-            setLoader(false);
-          });
+          parsePdbFunction(item)
+            .then((value) => {
+              setParse(value);
+              navigation.navigate("RenderProtein", { ligand: item });
+              setLoader(false);
+            })
+            .catch((error) => {
+              alert("Error has occurred when searching for the ligand");
+              setLoader(false);
+              //   console.log(error);
+            });
         }}
       >
         <LigandItemText>{item}</LigandItemText>
@@ -40,7 +46,6 @@ export default function LigandsList({ navigation, route }) {
     const subscription = AppState.addEventListener("change", (nextAppState) => {
       if (nextAppState.includes("background")) {
         navigation.navigate("Home");
-        // console.log("App has come to the foreground!");
       }
     });
 
@@ -49,8 +54,6 @@ export default function LigandsList({ navigation, route }) {
     };
   }, []);
   useEffect(() => {
-    // console.log("navigation:", navigation);
-    // console.log(route);
     if (search == "") setLigandsData(ligands);
     else {
       const tmpArray = ligands.filter((element) =>

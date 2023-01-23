@@ -8,6 +8,7 @@ export const parsePdbFunction = async (ligand) => {
   let result = {};
   const { data } = await axios.get(
     `https://files.rcsb.org/ligands/view/${ligand}_ideal.pdb`
+    // `https://files.rcsb.org/ligands/view/55959595_ideal.pdb`
   );
 
   const parsed = parsePdb(data);
