@@ -1,26 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import React, { useEffect } from "react";
 import styled from "styled-components/native";
 
 export default function Switch({
-  selectionMode,
-  roundCorner,
   options,
   activeOption,
   marginBottom,
   switchOption,
 }) {
-  const [getSelectionMode, setSelectionMode] = useState(selectionMode);
-  const [getRoundCorner, setRoundCorner] = useState(roundCorner);
-
-  const updatedSwitchData = (val) => {
-    setSelectionMode(val);
-    // onSelectSwitch(val);
-  };
-
-  useEffect(() => {
-    // console.log("active Option:", activeOption);
-  }, [activeOption]);
+  useEffect(() => {}, [activeOption]);
   return (
     <SwitchContainerStyle marginBottom={marginBottom}>
       {activeOption &&
@@ -42,7 +29,6 @@ export default function Switch({
 const SwitchContainerStyle = styled.View`
   flex-direction: row;
   background-color: ${({ theme }) => theme.background};
-  /* background-color: red; */
   width: 215px;
   height: 44px;
   align-items: center;

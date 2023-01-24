@@ -8,7 +8,6 @@ export const parsePdbFunction = async (ligand) => {
   let result = {};
   const { data } = await axios.get(
     `https://files.rcsb.org/ligands/view/${ligand}_ideal.pdb`
-    // `https://files.rcsb.org/ligands/view/55959595_ideal.pdb`
   );
 
   const parsed = parsePdb(data);
@@ -23,9 +22,6 @@ export const parsePdbFunction = async (ligand) => {
     serials[element.serial] = { x: element.x, y: element.y, z: element.z };
   });
 
-  // parsed.atoms.map((element) => {
-  //   console.log(element);
-  // });
   result = { atoms: parsed.atoms, serials, connectData };
   return result;
 };

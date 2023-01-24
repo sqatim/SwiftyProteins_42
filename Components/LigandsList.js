@@ -1,13 +1,11 @@
 import React, { PureComponent, useEffect, useState } from "react";
 import styled from "styled-components/native";
 import ligands from "../Utils/ligands.json";
-import { StatusBar } from "expo-status-bar";
-import { AppState, StyleSheet, TextInput } from "react-native";
+import { AppState } from "react-native";
 import Header from "./Header";
 import OrientationLoadingOverlay from "react-native-orientation-loading-overlay";
 import { useMyContext } from "./Context";
 import { parsePdbFunction } from "../Utils/data";
-import { useIsFocused } from "@react-navigation/native";
 
 class RenderItem extends PureComponent {
   render() {
@@ -25,7 +23,6 @@ class RenderItem extends PureComponent {
             .catch((error) => {
               alert("Error has occurred when searching for the ligand");
               setLoader(false);
-              //   console.log(error);
             });
         }}
       >
@@ -40,16 +37,10 @@ export default function LigandsList({ navigation, route }) {
   const [search, setSearch] = useState("");
   const { setParse, shareRef } = useMyContext();
   const [loader, setLoader] = useState(false);
-  const isFocused = useIsFocused();
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextAppState) => {
-      console.log("--------------------------------------------");
-      console.log("eventListner: LigandsList:", nextAppState);
       if (nextAppState.includes("background") && !shareRef.current) {
-        console.log("====>: Home");
-        console.log("====>:", nextAppState);
-        console.log("share:", shareRef.current);
         navigation.navigate("Home");
       }
     });
@@ -67,9 +58,6 @@ export default function LigandsList({ navigation, route }) {
       setLigandsData(tmpArray);
     }
   }, [search]);
-  useEffect(() => {
-    console.log("isFocused:", isFocused);
-  }, [isFocused]);
   return (
     <LigandsListStyle
       ListHeaderComponent={
@@ -134,7 +122,6 @@ const LigandItemText = styled.Text`
   margin-left: 10px;
   color: ${({ theme }) => theme.color};
   text-align: center;
-  /* color: white; */
 `;
 
 const SearchComponent = styled.View`
@@ -143,8 +130,6 @@ const SearchComponent = styled.View`
   justify-content: center;
   width: 100%;
   background-color: ${({ theme }) => theme.background};
-  /* background-color: yellow; */
-  /* position: sticky; */
 `;
 
 const SearchContainerStyle = styled.View`
@@ -153,22 +138,14 @@ const SearchContainerStyle = styled.View`
   flex-direction: row;
   background-color: ${({ theme }) => theme.background};
   height: 40px;
-  /* border-bottom-width: 1px; */
-  /* border-bottom-color: #f3f3f3; */
   width: 85%;
   border-radius: 15px;
   border: 1px;
   border-color: ${({ theme }) => theme.borderColorItems};
-  /* background-color: red; */
 `;
 
 const SearchInputStyle = styled.TextInput`
-  /* border-width: 1px; */
-  /* flex: 1; */
-  /* background-color: #fff; */
   background-color: ${({ theme }) => theme.background};
-
-  /* background-color: red; */
   height: 100%;
   width: 80%;
   padding-left: 10px;

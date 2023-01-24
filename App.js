@@ -1,4 +1,3 @@
-// import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { StatusBar, SafeAreaView } from "react-native";
 import styled from "styled-components/native";
@@ -6,10 +5,6 @@ import Context from "./Components/Context";
 import SplashScreen from "./Components/SplashScreen";
 import Routes from "./Components/Routes";
 import * as SecureStore from "expo-secure-store";
-
-// import * as SplashScreen from "expo-splash-screen";
-
-// SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -52,10 +47,6 @@ export default function App() {
     </SafeAreaView>
   );
 }
-
-// const ContainerStyle = styled.View`
-//   flex: 1;
-// `;
 
 const ContentStyle = styled.View`
   flex: 1;

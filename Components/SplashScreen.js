@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { ImageBackground } from "react-native";
 import styled from "styled-components/native";
 
 export default function SplashScreen({ light, setLight, setAppIsReady }) {
@@ -25,7 +24,6 @@ export default function SplashScreen({ light, setLight, setAppIsReady }) {
 
 const SplashScreenStyle = styled.View`
   flex: 1;
-  /* background-color: red; */
 `;
 
 const ImageBackgroundStyle = styled.ImageBackground`

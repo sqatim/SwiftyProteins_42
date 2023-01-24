@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Dimensions, AppState } from "react-native";
+import { Dimensions } from "react-native";
 import cpkData from "../Utils/CpkData.json";
 
 export const useMyContext = () => {
@@ -19,15 +19,19 @@ export const CPK_Coloring = {
   RASMOL: "Rasmol",
 };
 
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+
 export default function Context({ children, ...props }) {
   const [activeColor, setActiveColor] = useState("Rasmol");
   const [activeModelisation, setActiveModelisation] = useState("Sphere");
   const [data, setData] = useState(cpkData);
   const [parse, setParse] = useState({});
-  const [orientation, setOrientation] = useState("");
+  const [orientation, setOrientation] = useState(
+    windowWidth < windowHeight ? "Portrait" : "Landscape"
+  );
   const { light, setLight } = props;
   const shotRef = useRef();
-  //   const [share, setShare] = useState(false);
   const shareRef = useRef(false);
   useEffect(() => {
     Dimensions.addEventListener("change", ({ window: { width, height } }) => {
@@ -52,7 +56,6 @@ export default function Context({ children, ...props }) {
         setActiveModelisation,
         setLight,
         setParse,
-        // setShare,
         data,
       }}
     >

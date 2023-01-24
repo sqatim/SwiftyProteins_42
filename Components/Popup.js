@@ -1,25 +1,15 @@
 import React, { useEffect } from "react";
-import { Image, Modal, TouchableOpacity } from "react-native";
+import { Image, Modal } from "react-native";
 import styled from "styled-components/native";
 
 export default function Popup({ visible, setVisible, atomData }) {
-  useEffect(() => {
-    // console.log("atomData:", atomData);
-  }, [atomData]);
+  useEffect(() => {}, [atomData]);
 
   const closePopup = () => {
     setVisible(false);
   };
   return (
-    // <ModalContainerStyle>
-    <Modal
-      animationType="slide"
-      visible={visible}
-      transparent={true}
-      onRequestClose={() => {
-        // console.log("toto");
-      }}
-    >
+    <Modal animationType="slide" visible={visible} transparent={true}>
       <ModalStyle>
         <ModalContentStyle>
           <CloseButtonStyle onPress={closePopup}>
@@ -45,15 +35,8 @@ export default function Popup({ visible, setVisible, atomData }) {
         </ModalContentStyle>
       </ModalStyle>
     </Modal>
-    // </ModalContainerStyle>
   );
 }
-
-const ModalContainerStyle = styled.View`
-  justify-content: center;
-  align-items: center;
-  flex: 1;
-`;
 
 const ModalStyle = styled.View`
   flex: 1;
@@ -65,7 +48,6 @@ const ModalStyle = styled.View`
 const ModalContentStyle = styled.View`
   width: 80%;
   background-color: white;
-  /* height: 50px; */
   padding: 20px 20px 0;
   border-radius: 20px;
   elevation: 20;

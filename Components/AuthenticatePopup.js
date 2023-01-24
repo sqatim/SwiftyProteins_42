@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Image, Modal, TouchableOpacity } from "react-native";
+import { Image, Modal } from "react-native";
 import styled from "styled-components/native";
 import { stateType } from "../Utils/data";
 
@@ -14,7 +14,6 @@ export default function AuthenticatePopup({
     true: require("../assets/success.png"),
     false: require("../assets/failed.png"),
   };
-  //   const [icon, setIcon] = useState("");
   const timeOutRef = useRef();
   const closePopup = () => {
     clearTimeout(timeOutRef.current);
@@ -36,14 +35,7 @@ export default function AuthenticatePopup({
   }, [data]);
   if (data.state == stateType.INITIAL) return null;
   return (
-    <Modal
-      animationType="slide"
-      visible={visible}
-      transparent={true}
-      onRequestClose={() => {
-        // console.log("toto");
-      }}
-    >
+    <Modal animationType="slide" visible={visible} transparent={true}>
       <ModalStyle>
         <ModalContentStyle>
           <CloseButtonStyle onPress={closePopup}>
@@ -92,16 +84,4 @@ const MessageStyle = styled.Text`
   text-align: center;
   margin-bottom: 25px;
   font-size: 20px;
-`;
-
-const ContentItemStyle = styled.View`
-  width: 100%;
-  flex-direction: row;
-  margin: 20px 0;
-  justify-content: space-between;
-`;
-
-const KeyTextStyle = styled.Text``;
-const ValueTextStyle = styled.Text`
-  font-weight: bold;
 `;

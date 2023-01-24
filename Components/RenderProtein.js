@@ -8,13 +8,11 @@ import {
   PerspectiveCamera,
   Scene,
   Mesh,
-  MeshStandardMaterial,
   CylinderGeometry,
   Vector3,
   BoxGeometry,
   MeshMatcapMaterial,
 } from "three";
-import { parsePdbFunction } from "../Utils/data";
 import { useMyContext } from "./Context";
 import Options from "./Options";
 import OrbitControlsView from "./OrbitControlsView";
@@ -82,22 +80,17 @@ export default function RenderProtein({ route, navigation }) {
   };
   const onContextCreate = (gl) => {
     scene.current = new Scene();
-    console.log("rerenderd");
     camera.current = new PerspectiveCamera(
       orientation == "Portrait" ? 55 : 30,
-      // 0.5,
       gl.drawingBufferWidth / gl.drawingBufferHeight,
       0.1,
       1000
     );
-    // console.log(gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.canvas = {
       width: gl.drawingBufferWidth,
       height: gl.drawingBufferHeight,
     };
-    // console.log(gl);
-    camera.current.position.z = orientation == "Portrait" ? 40 : 25;
-    // camera.position.y = 50;
+    camera.current.position.z = orientation == "Portrait" ? 50 : 25;
     const renderer = new Renderer({ gl });
     renderer.setSize(gl.drawingBufferWidth, gl.drawingBufferHeight);
     renderer.setClearColor(light ? "#fff" : "#171223");
@@ -183,12 +176,11 @@ export default function RenderProtein({ route, navigation }) {
           <OrbitControlsView
             key={rerenderState}
             onLayout={(event) => {
-              var { x, y, width, height } = event.nativeEvent.layout;
+              var { width, height } = event.nativeEvent.layout;
               setWidthHeight({
                 width: width,
                 height: height,
               });
-              console.log("just for test:", x, y, width, height);
             }}
             style={{ flex: 1 }}
             camera={camera.current}
@@ -221,10 +213,8 @@ export default function RenderProtein({ route, navigation }) {
             atomData={atomData}
             setAtomData={setAtomData}
           />
-          {/* )} */}
         </>
       )}
-      {/* <TextStyle>{ligand}</TextStyle> */}
     </RenderProteinStyle>
   );
 }
@@ -233,5 +223,3 @@ const RenderProteinStyle = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.background};
 `;
-
-const TextStyle = styled.Text``;

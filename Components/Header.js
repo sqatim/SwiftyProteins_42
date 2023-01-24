@@ -10,7 +10,6 @@ export default function Header({ route, navigate, ligand }) {
   const { light, setLight, shotRef, shareRef } = useMyContext();
   const changeMode = async () => {
     const newMode = JSON.stringify({ light: !light });
-    console.log(newMode);
     await SecureStore.setItemAsync("light", newMode);
     setLight((prev) => !prev);
   };
@@ -20,7 +19,6 @@ export default function Header({ route, navigate, ligand }) {
 
   const share = async () => {
     shareRef.current = true;
-    console.log("share function");
     try {
       await shotRef.current.capture().then(async (uri) => {
         RNFS.readFile(uri, "base64").then((res) => {
@@ -32,13 +30,9 @@ export default function Header({ route, navigate, ligand }) {
             type: "image/jpeg",
           };
           Share.open(options)
-            .then((res) => {
-              //   console.log("result:", res);
-              //   setShare(false);
-            })
+            .then((res) => {})
             .catch((err) => {
               shareRef.current = false;
-              err && console.log(err);
             });
         });
       });
@@ -126,12 +120,10 @@ const RightSideHeaderStyle = styled.View`
 const ModeIconStyle = styled.Image`
   width: 30px;
   height: 30px;
-  /* margin-right: 10px; */
 `;
 const ShareIconStyle = styled.Image`
   width: 28px;
   height: 28px;
-  /* margin-right: 10px; */
 `;
 
 const ModeButtonStyle = styled.TouchableOpacity`

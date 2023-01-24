@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Text } from "react-native";
 import styled from "styled-components/native";
 import * as LocalAuthentication from "expo-local-authentication";
 import AuthenticatePopup from "./AuthenticatePopup";
@@ -22,7 +21,6 @@ export default function Home({ navigation, route }) {
 
   const authenticateFunction = async () => {
     const result = await LocalAuthentication.authenticateAsync();
-    console.log(result);
     if (result.success) {
       setData({
         state: stateType.TRUE,
