@@ -40,6 +40,7 @@ export default function RenderProtein({ route, navigation }) {
     light,
     shotRef,
     parse,
+    shareRef,
   } = useMyContext();
   const [widthHeight, setWidthHeight] = useState({});
   const scene = useRef();
@@ -47,9 +48,11 @@ export default function RenderProtein({ route, navigation }) {
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextAppState) => {
-      if (nextAppState.includes("background")) {
+      if (nextAppState.includes("background") && !shareRef.current) {
         navigation.navigate("Home");
-        // console.log("App has come to the foreground!");
+      } else if (nextAppState.includes("active") && shareRef.current) {
+        navigation.navigate("Home");
+        shareRef.current = false;
       }
     });
 
@@ -57,6 +60,7 @@ export default function RenderProtein({ route, navigation }) {
       subscription.remove();
     };
   }, []);
+
   useEffect(() => {
     setRerenderState((prev) => (prev === "true" ? "false" : "true"));
   }, [activeColor, activeModelisation, orientation, light]);

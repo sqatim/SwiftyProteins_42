@@ -7,7 +7,7 @@ import { useMyContext } from "./Context";
 import * as SecureStore from "expo-secure-store";
 
 export default function Header({ route, navigate, ligand }) {
-  const { light, setLight, shotRef } = useMyContext();
+  const { light, setLight, shotRef, shareRef } = useMyContext();
   const changeMode = async () => {
     const newMode = JSON.stringify({ light: !light });
     console.log(newMode);
@@ -19,7 +19,8 @@ export default function Header({ route, navigate, ligand }) {
   };
 
   const share = async () => {
-    console.log("share");
+    // shareRef.current = true;
+    // console.log("share function");
     // try {
     //   await shotRef.current.capture().then(async (uri) => {
     //     RNFS.readFile(uri, "base64").then((res) => {
@@ -32,9 +33,11 @@ export default function Header({ route, navigate, ligand }) {
     //       };
     //       Share.open(options)
     //         .then((res) => {
-    //           console.log(res);
+    //           //   console.log("result:", res);
+    //           //   setShare(false);
     //         })
     //         .catch((err) => {
+    //           shareRef.current = false;
     //           err && console.log(err);
     //         });
     //     });

@@ -38,13 +38,18 @@ class RenderItem extends PureComponent {
 export default function LigandsList({ navigation, route }) {
   const [ligandsData, setLigandsData] = useState(ligands);
   const [search, setSearch] = useState("");
-  const { setParse } = useMyContext();
+  const { setParse, shareRef } = useMyContext();
   const [loader, setLoader] = useState(false);
   const isFocused = useIsFocused();
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextAppState) => {
-      if (nextAppState.includes("background")) {
+      console.log("--------------------------------------------");
+      console.log("eventListner: LigandsList:", nextAppState);
+      if (nextAppState.includes("background") && !shareRef.current) {
+        console.log("====>: Home");
+        console.log("====>:", nextAppState);
+        console.log("share:", shareRef.current);
         navigation.navigate("Home");
       }
     });

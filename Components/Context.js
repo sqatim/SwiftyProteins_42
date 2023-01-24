@@ -27,8 +27,8 @@ export default function Context({ children, ...props }) {
   const [orientation, setOrientation] = useState("");
   const { light, setLight } = props;
   const shotRef = useRef();
-  const appState = useRef(AppState.currentState);
-
+  //   const [share, setShare] = useState(false);
+  const shareRef = useRef(false);
   useEffect(() => {
     Dimensions.addEventListener("change", ({ window: { width, height } }) => {
       if (width < height) {
@@ -46,11 +46,13 @@ export default function Context({ children, ...props }) {
         orientation,
         light,
         parse,
+        shareRef,
         shotRef,
         setActiveColor,
         setActiveModelisation,
         setLight,
         setParse,
+        // setShare,
         data,
       }}
     >
