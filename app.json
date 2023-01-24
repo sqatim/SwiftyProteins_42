@@ -5,7 +5,7 @@
         "scheme": "com.proteins.app",
         "version": "1.0.0",
         "orientation": "default",
-        "icon": "./assets/blue.png",
+        "icon": "./assets/blueColor.png",
         "userInterfaceStyle": "light",
         "updates": {
             "fallbackToCacheTimeout": 0
@@ -18,7 +18,7 @@
         },
         "android": {
             "adaptiveIcon": {
-                "foregroundImage": "./assets/adaptive-icon.png",
+                "foregroundImage": "./assets/blueColor.png",
                 "backgroundColor": "#FFFFFF"
             },
             "package": "com.proteins.app"

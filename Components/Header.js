@@ -2,8 +2,8 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { useMyContext } from "./Context";
-// import Share from "react-native-share";
-// import RNFS from "react-native-fs";
+import Share from "react-native-share";
+import RNFS from "react-native-fs";
 import * as SecureStore from "expo-secure-store";
 
 export default function Header({ route, navigate, ligand }) {
@@ -19,32 +19,32 @@ export default function Header({ route, navigate, ligand }) {
   };
 
   const share = async () => {
-    // shareRef.current = true;
-    // console.log("share function");
-    // try {
-    //   await shotRef.current.capture().then(async (uri) => {
-    //     RNFS.readFile(uri, "base64").then((res) => {
-    //       let urlString = "data:image/jpeg;base64," + res;
-    //       let options = {
-    //         title: "Share Title",
-    //         message: "this is a 3d visualization of the " + ligand + " protein",
-    //         url: urlString,
-    //         type: "image/jpeg",
-    //       };
-    //       Share.open(options)
-    //         .then((res) => {
-    //           //   console.log("result:", res);
-    //           //   setShare(false);
-    //         })
-    //         .catch((err) => {
-    //           shareRef.current = false;
-    //           err && console.log(err);
-    //         });
-    //     });
-    //   });
-    // } catch (error) {
-    //   console.log("error:", error);
-    // }
+    shareRef.current = true;
+    console.log("share function");
+    try {
+      await shotRef.current.capture().then(async (uri) => {
+        RNFS.readFile(uri, "base64").then((res) => {
+          let urlString = "data:image/jpeg;base64," + res;
+          let options = {
+            title: "Share Title",
+            message: "this is a 3d visualization of the " + ligand + " protein",
+            url: urlString,
+            type: "image/jpeg",
+          };
+          Share.open(options)
+            .then((res) => {
+              //   console.log("result:", res);
+              //   setShare(false);
+            })
+            .catch((err) => {
+              shareRef.current = false;
+              err && console.log(err);
+            });
+        });
+      });
+    } catch (error) {
+      console.log("error:", error);
+    }
   };
 
   return (
