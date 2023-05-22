@@ -3,6 +3,8 @@
 SwiftyProteins is a 3D visualizer for proteins models according to standardized representation from the PDB
 [(Protein Data Bank)](https://www.rcsb.org/) 3D, fingerprints and other things ...  
 
+## Subject
++ [SwiftyProteins Subject](/SwiftyProteins_subject.pdf)
 
 ## Goals
 
@@ -21,5 +23,6 @@ This project aims to make you familiar with :
 - Android
 
 ## Demo
+** **(Please wait for the demo to begin.)** **
 
 <img src="https://github.com/sqatim/swiftyProteins_42/blob/main/assets/SwiftyProteinDemo.gif" width="40%"/>
